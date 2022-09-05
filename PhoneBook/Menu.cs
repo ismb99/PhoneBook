@@ -12,7 +12,6 @@ namespace PhoneBook
     {
         public static PhoneBookContext dbContext = new PhoneBookContext();
 
-
         public static void ShowMenu()
         {
             bool closeApp = false;
@@ -69,7 +68,6 @@ namespace PhoneBook
 
         private static void ProcessUpdate()
         {
-        
             var allContacts = ContactController.GetAllContact();
 
             using (var dbContext = new PhoneBookContext())

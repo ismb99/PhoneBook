@@ -10,64 +10,61 @@ namespace PhoneBook
 {
     public class ContactController
     {
-        public static PhoneBookContext dbContext = new PhoneBookContext();
+        //public static PhoneBookContext dbContext = new PhoneBookContext();
 
         public static void AddContact(string name, string number)
         {
             var contact = new Contacts() { Name = name, PhoneNumber = number };
+            using (var dbContext = new PhoneBookContext())
+            {
+                dbContext.Add(contact);
+                Console.WriteLine("\n\nContact added!");
+                dbContext.SaveChanges();
+            }
 
-            dbContext.Add(contact);
-            Console.WriteLine("\n\nContact added!");
-            dbContext.SaveChanges();
 
         }
 
         public static void Update(Contacts contact)
         {
-            dbContext.Update(contact);
-            dbContext.SaveChanges();
+            using (var dbContext = new PhoneBookContext())
+            {
+                dbContext.Update(contact);
+                dbContext.SaveChanges();
+            }
+
         }
 
         public static void Delete(Contacts contact)
         {
-            dbContext.Remove(contact);
-            dbContext.SaveChanges();
+            using (var dbContext = new PhoneBookContext())
+            {
+                dbContext.Remove(contact);
+                dbContext.SaveChanges();
+            }
+
         }
 
 
         public static List<Contacts> GetAllContact()
         {
-
-            var context = new PhoneBookContext();
-            var allContacts = context.Contacts.ToList();
-
-            ContactVisualizer.ShowContacts(allContacts);
-
-            return allContacts;
-
-            //Console.Clear();
-
-            //Console.WriteLine("All the contacts in the phonebook");
-            //Console.WriteLine("----------------------------------");
-            //var contacts = dbContext.Contacts;
-
-            //foreach (var person in contacts)
-            //{
-            //    Console.WriteLine("\n");
-            //    Console.WriteLine($"Name: {person.Name} Number: {person.PhoneNumber}");
-            //    Console.WriteLine("\n");
-
-            //}
+            using (var dbContext = new PhoneBookContext())
+            {
+                var allContacts = dbContext.Contacts.ToList();
+                ContactVisualizer.ShowContacts(allContacts);
+                return allContacts;
+            }
 
         }
 
         public static void GetContact(int id)
         {
-            var contact = dbContext.Contacts.FirstOrDefault(x => x.Id == id);
+            using (var dbContext = new PhoneBookContext())
+            {
+                var contact = dbContext.Contacts.FirstOrDefault(x => x.Id == id);
+                Console.WriteLine(contact.Name);
+            }
 
-            Console.WriteLine(contact.Name);
-
-           
         }
 
 
