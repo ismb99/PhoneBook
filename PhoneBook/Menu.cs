@@ -69,10 +69,7 @@ namespace PhoneBook
 
         private static void ProcessUpdate()
         {
-            // 1. Hämta alla contacts
-            // 2. Användaren väljer contact på namn
-            // 3. Spara ner som ett objekt i en variabel
-            // 4. användaren uppdaterar
+        
             var allContacts = ContactController.GetAllContact();
 
             using (var dbContext = new PhoneBookContext())
