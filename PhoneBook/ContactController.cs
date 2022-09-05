@@ -17,56 +17,47 @@ namespace PhoneBook
             var contact = new Contacts() { Name = name, PhoneNumber = number };
 
             dbContext.Add(contact);
-            Console.WriteLine("Contact added!");
-
+            Console.WriteLine("\n\nContact added!");
             dbContext.SaveChanges();
 
         }
 
-        public static void Update(int id)
+        public static void Update(Contacts contact)
         {
-            dbContext.Update(id);
+            dbContext.Update(contact);
             dbContext.SaveChanges();
         }
 
-        public static void Delete()
+        public static void Delete(Contacts contact)
         {
+            dbContext.Remove(contact);
+            dbContext.SaveChanges();
+        }
 
-            Console.Write("Type the id you want to delete: ");
-            string line = Console.ReadLine();
-            int id = int.Parse(line);
+
+        public static List<Contacts> GetAllContact()
+        {
 
             var context = new PhoneBookContext();
-            var contactId = context.Contacts.Where(x => id == x.Id).ToList();
+            var allContacts = context.Contacts.ToList();
 
-            foreach (var item in contactId)
-            {
-               if(item.Id == id)
-                {
-                    dbContext.Remove(item);
-                    dbContext.SaveChanges(); 
-                }
-            }
-        }
+            ContactVisualizer.ShowContacts(allContacts);
 
+            return allContacts;
 
-        public static void GetAllContact()
-        {
-            //var firstContact = dbContext.Contacts.First();
+            //Console.Clear();
 
-            Console.Clear();
+            //Console.WriteLine("All the contacts in the phonebook");
+            //Console.WriteLine("----------------------------------");
+            //var contacts = dbContext.Contacts;
 
-            Console.WriteLine("All the contacts in the phonebook");
-            Console.WriteLine("----------------------------------");
-            var contacts = dbContext.Contacts;
+            //foreach (var person in contacts)
+            //{
+            //    Console.WriteLine("\n");
+            //    Console.WriteLine($"Name: {person.Name} Number: {person.PhoneNumber}");
+            //    Console.WriteLine("\n");
 
-            foreach (var person in contacts)
-            {
-                Console.WriteLine("\n");
-                Console.WriteLine($"Name: {person.Name} Number: {person.PhoneNumber}");
-                Console.WriteLine("\n");
-
-            }
+            //}
 
         }
 

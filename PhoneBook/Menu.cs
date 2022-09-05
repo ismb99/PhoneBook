@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PhoneBook.Models;
+using PhoneBook.Models.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,20 +10,21 @@ namespace PhoneBook
 {
     public static class Menu
     {
+        public static PhoneBookContext dbContext = new PhoneBookContext();
+
+
         public static void ShowMenu()
         {
-            
             bool closeApp = false;
+
             while (closeApp == false)
             {
-
-
-
+                Console.WriteLine("\n");
                 Console.WriteLine(@"What would you like todo ? Choose from the options below:
-            1 - Add Contact
-            2 - Delete Contact
-            3 - Update Contact
-            4 - Show all contacts
+            1 - Create a Contact
+            2 - Delete a Contact
+            3 - Update a Contact
+            4 - View all contacts
             5 - Show Contact by id
             6 - Quit");
                 Console.WriteLine("----------------------------------------------");
@@ -32,17 +35,17 @@ namespace PhoneBook
                 switch (userChoice)
                 {
                     case "1":
-                        ProccesAdd();
+                        Console.Clear();
+                        ProcessAdd();
                         break;
 
                     case "2":
-                        ContactController.Delete();
+                        ProcessDelete();
                         break;
 
-                    //case "3":
-                    //    ContactController.Update();
-                    //    break;
-
+                    case "3":
+                        ProcessUpdate();
+                        break;
 
                     case "4":
                         ContactController.GetAllContact();
@@ -53,6 +56,7 @@ namespace PhoneBook
                         break;
 
                     case "6":
+                        Console.WriteLine("Godbyee");
                         closeApp = true;
                         break;
 
@@ -63,45 +67,88 @@ namespace PhoneBook
             }
         }
 
-        //private static void ProccesUpdate()
-        //{
-        //    UserInput userInput = new UserInput();
-
-        //    int id = userInput.GetNumInput("Type the id you want to update");
-
-        //    if(id == 0 || id < 0)
-        //    {
-        //        Console.WriteLine("Id dosent exsist");
-        //    }
-
-        //    string name = userInput.GetStringInput("Type the name: :");
-        //    string number = userInput.GetStringInput("type the number: ");
-
-        //    ContactController.Update(id);
-        //}
-
-        //private static void ProccesDelete()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        private static void ProccesAdd()
+        private static void ProcessUpdate()
         {
-            // kolla om det är rätt input
-            // validera data typer mm
-            // anrpota Addmetoden och lägg in input
+            // 1. Hämta alla contacts
+            // 2. Användaren väljer contact på namn
+            // 3. Spara ner som ett objekt i en variabel
+            // 4. användaren uppdaterar
+            var allContacts = ContactController.GetAllContact();
 
-            Console.Write("Type contacts namne, or 0 to return to main menu: ");
-            string inputName = Console.ReadLine();
-            if (inputName == "0") Menu.ShowMenu();
+            using (var dbContext = new PhoneBookContext())
+            {
+                Console.Write("choose the contact by name you want to update: ");
+                string line = Console.ReadLine();
+                Contacts contact = allContacts.FirstOrDefault(n => line == n.Name);
+
+                if (contact != null)
+                {
+                    Console.WriteLine("type the name you want to change to");
+                    string newName = Console.ReadLine();
+                    Console.Write("Type the new number: ");
+                    string newNumber = Console.ReadLine();
+                    contact.Name = newName;
+                    contact.PhoneNumber = newNumber;
+                }
+                else
+
+                {
+                    Console.WriteLine($"{contact} not found");
+                }
+                ContactController.Update(contact);
+            };
+        }
+
+        //private static List<Contacts> ProcessGet()
+        //{
+
+        //}
+
+        private static void ProcessDelete()
+        {
+            var allContacts = ContactController.GetAllContact();
+
+            Console.Write("Type the name you want to delete or press 0 to return to main menu: ");
+            string line = Console.ReadLine();
+            if (line == "0") ShowMenu();
+
+            var name = allContacts.FirstOrDefault(n => line == n.Name);
+
+            if(name != null)
+            {
+                Console.WriteLine($"found {name.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"{name} not found");
+            }
+
+            ContactController.Delete(name);
+        }
+
+        private static void ProcessAdd()
+        {
+            Console.Write("Type contacts name, or 0 to return to main menu: ");
+            
+            string name = Console.ReadLine();
+            if (name == "0") Menu.ShowMenu();
+
+            while (string.IsNullOrEmpty(name))
+            {
+                Console.WriteLine("Name can not be empty, try again");
+                name = Console.ReadLine();
+            }
 
             Console.Write("Type contacts number or 0 for main menu: ");
-            string inputNumber = Console.ReadLine();
+            string number = Console.ReadLine();
           
-            if(inputNumber == "0") Menu.ShowMenu();
-
-           ContactController.AddContact(inputName, inputNumber);
-
+            if(number == "0") Menu.ShowMenu();
+            while (string.IsNullOrEmpty(number))
+            {
+                Console.WriteLine("Name can not be empty, try again");
+                number = Console.ReadLine();
+            }
+            ContactController.AddContact(name, number);
         }
     }
 }

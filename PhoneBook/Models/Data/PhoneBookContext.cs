@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace PhoneBook.Models.Data
 {
-    public class PhoneBookContext : DbContext
+    public class PhoneBookContext : DbContext 
     {
-        public DbSet<Contacts>? Contacts { get; set; }
-
+       
+        public DbSet<Contacts>? Contacts { get; set; } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
