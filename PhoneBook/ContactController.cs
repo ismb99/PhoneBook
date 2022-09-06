@@ -21,8 +21,6 @@ namespace PhoneBook
                 Console.WriteLine("\n\nContact added!");
                 dbContext.SaveChanges();
             }
-
-
         }
 
         public static void Update(Contacts contact)
@@ -32,7 +30,6 @@ namespace PhoneBook
                 dbContext.Update(contact);
                 dbContext.SaveChanges();
             }
-
         }
 
         public static void Delete(Contacts contact)
@@ -42,9 +39,7 @@ namespace PhoneBook
                 dbContext.Remove(contact);
                 dbContext.SaveChanges();
             }
-
         }
-
 
         public static List<Contacts> GetAllContact()
         {
@@ -54,7 +49,6 @@ namespace PhoneBook
                 ContactVisualizer.ShowContacts(allContacts);
                 return allContacts;
             }
-
         }
 
         public static void GetContact(int id)
@@ -66,16 +60,7 @@ namespace PhoneBook
             }
 
         }
-
-
-        //while(!int.TryParse(line, out _) || int.Parse(line) < 0)
-        //{
-        //    Console.WriteLine("Invalid input, try again");
-        //    line = Console.ReadLine();
-        //}
-
-        //int finalInput = int.Parse(line);
-        //return finalInput;
+       
     }
 
 }

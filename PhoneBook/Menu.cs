@@ -10,8 +10,6 @@ namespace PhoneBook
 {
     public static class Menu
     {
-        public static PhoneBookContext dbContext = new PhoneBookContext();
-
         public static void ShowMenu()
         {
             bool closeApp = false;
@@ -78,26 +76,61 @@ namespace PhoneBook
 
                 if (contact != null)
                 {
-                    Console.WriteLine("type the name you want to change to");
-                    string newName = Console.ReadLine();
-                    Console.Write("Type the new number: ");
-                    string newNumber = Console.ReadLine();
-                    contact.Name = newName;
-                    contact.PhoneNumber = newNumber;
+                    Console.Write("Press 1 to update the name, press 2 to update number, press 3 to close app or 0 to return to main menu: ");
+                    string input = Console.ReadLine();
+
+                  
+                    
+                        switch (input)
+                        {
+                            case "0":
+                                ShowMenu();
+                                break;
+
+                            case "1":
+                                Console.Clear();
+                                Console.Write("Type the new name: ");
+                                string name = Console.ReadLine();
+                                while (string.IsNullOrEmpty(name) && name == input)
+                                {
+                                    Console.WriteLine("Invalid input or name already exist, try again");
+                                    name = Console.ReadLine();
+                                }
+                                Console.WriteLine($"Name updated to {name}");
+                                contact.Name = name;
+                                break;
+
+                            case "2":
+                                Console.Clear();
+                                Console.Write("Type the new phonenumber: ");
+                                string number = Console.ReadLine();
+                                while (string.IsNullOrEmpty(number) && number == input)
+                                {
+                                    Console.WriteLine("Invalid input or number already exist, try again");
+                                    number = Console.ReadLine();
+                                }
+                                Console.WriteLine($"phone number updated to {number}");
+
+                                contact.PhoneNumber = number;
+                                break;
+
+                            case "3":
+                                Console.WriteLine("Goodbye");
+                                break;
+
+                            default:
+                                Console.WriteLine("Invalid input, try again");
+                                break;
+                        }
+                    ContactController.Update(contact);
                 }
                 else
-
                 {
                     Console.WriteLine($"{contact} not found");
                 }
-                ContactController.Update(contact);
+                
             };
         }
-
-        //private static List<Contacts> ProcessGet()
-        //{
-
-        //}
 
         private static void ProcessDelete()
         {
@@ -109,7 +142,7 @@ namespace PhoneBook
 
             var name = allContacts.FirstOrDefault(n => line == n.Name);
 
-            if(name != null)
+            if (name != null)
             {
                 Console.WriteLine($"found {name.Name}");
             }
@@ -124,7 +157,7 @@ namespace PhoneBook
         private static void ProcessAdd()
         {
             Console.Write("Type contacts name, or 0 to return to main menu: ");
-            
+
             string name = Console.ReadLine();
             if (name == "0") Menu.ShowMenu();
 
@@ -136,8 +169,8 @@ namespace PhoneBook
 
             Console.Write("Type contacts number or 0 for main menu: ");
             string number = Console.ReadLine();
-          
-            if(number == "0") Menu.ShowMenu();
+
+            if (number == "0") Menu.ShowMenu();
             while (string.IsNullOrEmpty(number))
             {
                 Console.WriteLine("Name can not be empty, try again");
