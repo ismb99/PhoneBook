@@ -23,7 +23,8 @@ namespace PhoneBook
             3 - Update a Contact
             4 - View all contacts
             5 - Show Contact by id
-            6 - Quit");
+            6 - Send Email
+            7 - Quit");
                 Console.WriteLine("----------------------------------------------");
                 Console.WriteLine("\n\n");
 
@@ -48,11 +49,15 @@ namespace PhoneBook
                         ContactController.GetAllContact();
                         break;
 
-                    case "5":
-                        ContactController.GetContact(2);
-                        break;
+                    //case "5":
+                    //    ContactController.GetContact(2);
+                    //    break;
 
                     case "6":
+                        ProecessEmail();
+                        break;
+
+                    case "7":
                         Console.WriteLine("Godbyee");
                         closeApp = true;
                         break;
@@ -64,6 +69,13 @@ namespace PhoneBook
             }
         }
 
+        private static void ProecessEmail()
+        {
+            //Console.Write("Type your email adress: ");
+            //string email = Console.ReadLine();
+        }
+
+        // Update contact
         private static void ProcessUpdate()
         {
             var allContacts = ContactController.GetAllContact();
@@ -78,8 +90,6 @@ namespace PhoneBook
                 {
                     Console.Write("Press 1 to update the name, press 2 to update number, press 3 to close app or 0 to return to main menu: ");
                     string input = Console.ReadLine();
-
-                  
                     
                         switch (input)
                         {
@@ -132,6 +142,7 @@ namespace PhoneBook
             };
         }
 
+        // Delete contact
         private static void ProcessDelete()
         {
             var allContacts = ContactController.GetAllContact();
@@ -144,22 +155,23 @@ namespace PhoneBook
 
             if (name != null)
             {
-                Console.WriteLine($"found {name.Name}");
+                Console.WriteLine($"\n{name.Name} was deleted from contacts");
             }
             else
             {
-                Console.WriteLine($"{name} not found");
+                Console.WriteLine($"\n{name} not found");
             }
 
             ContactController.Delete(name);
         }
 
+        // Create contact
         private static void ProcessAdd()
         {
             Console.Write("Type contacts name, or 0 to return to main menu: ");
 
             string name = Console.ReadLine();
-            if (name == "0") Menu.ShowMenu();
+            if (name == "0") ShowMenu();
 
             while (string.IsNullOrEmpty(name))
             {
@@ -170,7 +182,7 @@ namespace PhoneBook
             Console.Write("Type contacts number or 0 for main menu: ");
             string number = Console.ReadLine();
 
-            if (number == "0") Menu.ShowMenu();
+            if (number == "0") ShowMenu();
             while (string.IsNullOrEmpty(number))
             {
                 Console.WriteLine("Name can not be empty, try again");

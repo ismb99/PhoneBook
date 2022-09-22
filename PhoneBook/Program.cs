@@ -1,4 +1,7 @@
 ﻿
 using PhoneBook;
 
-Menu.ShowMenu();
+
+EmailService.SendMail();
+//Menu.ShowMenu();
+

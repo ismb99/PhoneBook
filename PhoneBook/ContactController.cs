@@ -51,15 +51,14 @@ namespace PhoneBook
             }
         }
 
-        public static void GetContact(int id)
-        {
-            using (var dbContext = new PhoneBookContext())
-            {
-                var contact = dbContext.Contacts.FirstOrDefault(x => x.Id == id);
-                Console.WriteLine(contact.Name);
-            }
-
-        }
+        //public static void GetContact(int id)
+        //{
+        //    using (var dbContext = new PhoneBookContext())
+        //    {
+        //        var contact = dbContext.Contacts.FirstOrDefault(x => x.Id == id);
+        //        Console.WriteLine(contact.Name);
+        //    }
+        //}
        
     }
 
