@@ -15,6 +15,7 @@ namespace PhoneBook
 
             ConsoleTableBuilder
                 .From(tableData)
+                .WithTitle("CONTACTS", ConsoleColor.Yellow, ConsoleColor.DarkGray)
                 .ExportAndWriteLine();
             Console.WriteLine("\n\n");
         }

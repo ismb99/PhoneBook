@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace PhoneBook
 {
-    public static class Menu
+    public class Menu
     {
+        UserInput userInput = new UserInput();
+
         public static void ShowMenu()
         {
             bool closeApp = false;
@@ -18,11 +20,11 @@ namespace PhoneBook
             {
                 Console.WriteLine("\n");
                 Console.WriteLine(@"What would you like todo ? Choose from the options below:
-            1 - Create a Contact
+            1 - Add Contact
             2 - Delete a Contact
             3 - Update a Contact
-            4 - View all contacts
-            5 - Show Contact by id
+            4 - View All contacts
+            5 - Show Contact
             6 - Send Email
             7 - Quit");
                 Console.WriteLine("----------------------------------------------");
@@ -168,6 +170,7 @@ namespace PhoneBook
         // Create contact
         private static void ProcessAdd()
         {
+
             Console.Write("Type contacts name, or 0 to return to main menu: ");
 
             string name = Console.ReadLine();

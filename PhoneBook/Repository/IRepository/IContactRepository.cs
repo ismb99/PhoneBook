@@ -9,9 +9,9 @@ namespace PhoneBook.Repository.IRepository
 {
     internal interface IContactRepository
     {
-        IEnumerable<Contacts> GetAllContact();
+        List<Contacts> GetAllContact();
         Contacts AddContact(Contacts contacts);
-        Contacts Delete(Contacts contacts);
+        Contacts Delete(int id);
         Contacts Update(Contacts contacts);
 
     }

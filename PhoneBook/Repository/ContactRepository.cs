@@ -11,36 +11,44 @@ namespace PhoneBook.Repository
 {
     public class ContactRepository : IContactRepository
     {
-        private readonly PhoneBookContext context;
+        private readonly PhoneBookContext _context;
 
         public ContactRepository(PhoneBookContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         public Contacts AddContact(Contacts contacts)
         {
-            context.Contacts.Add(contacts);
-            context.SaveChanges();
+            _context.Contacts.Add(contacts);
+            _context.SaveChanges();
             return contacts;
         }
 
-        public Contacts Delete(Contacts contacts)
+
+        public Contacts Delete(int id)
         {
-            context.Contacts.Remove(contacts);
-            context.SaveChanges();
-            return contacts;
+            var contact = _context.Contacts.FirstOrDefault(i => i.Id == id);
+
+            if(contact != null)
+            {
+                _context.Remove(contact);
+                _context.SaveChanges();
+                return contact;
+            }
+
+            return contact;
         }
 
-        public IEnumerable<Contacts> GetAllContact()
+        public List<Contacts> GetAllContact()
         {
-            return context.Contacts;
+            return _context.Contacts.ToList();
         }
 
         public Contacts Update(Contacts contacts)
         {
-            context.Contacts.Update(contacts);
-            context.SaveChanges();
+            _context.Contacts.Update(contacts);
+            _context.SaveChanges();
             return contacts;
         }
     }

@@ -1,4 +1,5 @@
-﻿using PhoneBook.Repository.IRepository;
+﻿using PhoneBook.Models;
+using PhoneBook.Repository.IRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,14 @@ namespace PhoneBook.Controller
         public PhoneBookController(IContactRepository contactRepository)
         {
             _contactRepository = contactRepository;
+        }
+
+
+        public void Post(Contacts contact)
+        {
+            // via interface lägg till ny kontakt?
+
+            var contact = _contactRepository.AddContact()
         }
     }
 }
