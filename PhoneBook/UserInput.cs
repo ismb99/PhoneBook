@@ -8,8 +8,9 @@ namespace PhoneBook
 {
     internal class UserInput
     {
-        public string GetuserInput(string message)
+        public static string GetuserInput(string message)
         {
+            Console.Write(message);
             string input = Console.ReadLine();
 
             while (string.IsNullOrEmpty(input))
@@ -18,7 +19,6 @@ namespace PhoneBook
                 input = Console.ReadLine();
             }
             return input;   
-
         }
     }
 }

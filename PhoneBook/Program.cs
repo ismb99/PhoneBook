@@ -13,8 +13,6 @@ using PhoneBook.Repository.IRepository;
 
 class Program
 {
-
-
     static void Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
@@ -25,10 +23,9 @@ class Program
 
         var phoneBookController = new PhoneBookController(contactRepository);
 
-        Menu.ShowMenu();
-
+        phoneBookController.ShowMenu();
+      
     }
-
 
     private static IHostBuilder CreateHostBuilder(string[] args)
     {

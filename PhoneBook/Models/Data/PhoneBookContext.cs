@@ -9,13 +9,10 @@ namespace PhoneBook.Models.Data
 {
     public class PhoneBookContext : DbContext 
     {
-       
-        public DbSet<Contacts>? Contacts { get; set; } 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public PhoneBookContext(DbContextOptions<PhoneBookContext> options) : base(options)
         {
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\\Local;Initial Catalog=PhoneBook; Integrated Security=True");
-            optionsBuilder.UseSqlServer(@"Server=.;Database=PhoneBook;Trusted_Connection=True;");
+
         }
+        public DbSet<Contacts>? Contacts { get; set; } 
     }
 }

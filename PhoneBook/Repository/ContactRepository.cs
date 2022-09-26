@@ -26,7 +26,7 @@ namespace PhoneBook.Repository
         }
 
 
-        public Contacts Delete(int id)
+        public Contacts Remove(int id)
         {
             var contact = _context.Contacts.FirstOrDefault(i => i.Id == id);
 

@@ -11,7 +11,7 @@ namespace PhoneBook.Repository.IRepository
     {
         List<Contacts> GetAllContact();
         Contacts AddContact(Contacts contacts);
-        Contacts Delete(int id);
+        Contacts Remove(int id);
         Contacts Update(Contacts contacts);
 
     }
