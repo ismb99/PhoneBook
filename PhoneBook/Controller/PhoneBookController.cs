@@ -10,8 +10,6 @@ namespace PhoneBook.Controller
     internal class PhoneBookController
     {
         private readonly IContactRepository _contactRepository;
-        private readonly UserInput userInput = new UserInput();
-
 
         public PhoneBookController(IContactRepository contactRepository)
         {
@@ -21,6 +19,12 @@ namespace PhoneBook.Controller
         public void Post(Contacts contact)
         {
             _contactRepository.AddContact(contact);
+        }
+
+
+        public void Put(Contacts contact)
+        {
+            _contactRepository.Update(contact);
         }
 
         public void GetAll()
@@ -129,7 +133,7 @@ namespace PhoneBook.Controller
                         Text = $"{item.Name}"
                     };
 
-                     client.Send(message);
+                    client.Send(message);
                 }
 
                 Console.WriteLine("Email sent");
@@ -146,70 +150,32 @@ namespace PhoneBook.Controller
         }
 
         // Update contact
-        private static void ProcessUpdate()
+        private void ProcessUpdate()
         {
-            //var allContacts = ContactController.GetAllContact();
+            GetAll();
+            string input = UserInput.GetuserInput("Choose the id you want to update or press 0 for main menu: ");
+            if (input == "0") ShowMenu();
+            int id = int.Parse(input);
 
-            //using (var dbContext = new PhoneBookContext())
-            //{
-            //    Console.Write("choose the contact by name you want to update: ");
-            //    string line = Console.ReadLine();
-            //    Contacts contact = allContacts.FirstOrDefault(n => line == n.Name);
+            var contact = _contactRepository.GetAllContact().FirstOrDefault(contact => contact.Id == id);
 
-            //    if (contact != null)
-            //    {
-            //        Console.Write("Press 1 to update the name, press 2 to update number, press 3 to close app or 0 to return to main menu: ");
-            //        string input = Console.ReadLine();
+            if (contact != null)
+            {
+                string name = UserInput.GetuserInput("Update name: ");
+                string phoneNumber = UserInput.GetuserInput("Update number: ");
+                string email = UserInput.GetuserInput("Update email: ");
 
-            //            switch (input)
-            //            {
-            //                case "0":
-            //                    ShowMenu();
-            //                    break;
+                contact.Name = name;
+                contact.PhoneNumber = phoneNumber;
+                contact.Emaill = email;
+                Put(contact);
 
-            //                case "1":
-            //                    Console.Clear();
-            //                    Console.Write("Type the new name: ");
-            //                    string name = Console.ReadLine();
-            //                    while (string.IsNullOrEmpty(name) && name == input)
-            //                    {
-            //                        Console.WriteLine("Invalid input or name already exist, try again");
-            //                        name = Console.ReadLine();
-            //                    }
-            //                    Console.WriteLine($"Name updated to {name}");
-            //                    contact.Name = name;
-            //                    break;
-
-            //                case "2":
-            //                    Console.Clear();
-            //                    Console.Write("Type the new phonenumber: ");
-            //                    string number = Console.ReadLine();
-            //                    while (string.IsNullOrEmpty(number) && number == input)
-            //                    {
-            //                        Console.WriteLine("Invalid input or number already exist, try again");
-            //                        number = Console.ReadLine();
-            //                    }
-            //                    Console.WriteLine($"phone number updated to {number}");
-
-            //                    contact.PhoneNumber = number;
-            //                    break;
-
-            //                case "3":
-            //                    Console.WriteLine("Goodbye");
-            //                    break;
-
-            //                default:
-            //                    Console.WriteLine("Invalid input, try again");
-            //                    break;
-            //            }
-            //        ContactController.Update(contact);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"{contact} not found");
-            //    }
-
-            //};
+            }
+            else
+            {
+                Console.Write("Id not found, try again");
+                ProcessUpdate();
+            }
         }
 
         // Delete contact
@@ -224,8 +190,8 @@ namespace PhoneBook.Controller
             var alltContacts = _contactRepository.GetAllContact();
 
             var contact = alltContacts.Where(x => x.Id == id).FirstOrDefault();
-            
-            if(contact != null)
+
+            if (contact != null)
             {
                 List<Contacts> idContact = new List<Contacts>();
                 idContact.Add(contact);
