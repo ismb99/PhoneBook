@@ -21,7 +21,6 @@ namespace PhoneBook.Controller
             _contactRepository.AddContact(contact);
         }
 
-
         public void Put(Contacts contact)
         {
             _contactRepository.Update(contact);
@@ -33,7 +32,10 @@ namespace PhoneBook.Controller
 
             ContactVisualizer.ShowContacts(phoneBookList);
         }
-
+        public void Get(int id)
+        {
+            _contactRepository.GetContact(id);
+        }
         public void Delete(int id)
         {
             _contactRepository.Remove(id);
@@ -80,9 +82,9 @@ namespace PhoneBook.Controller
                         GetAll();
                         break;
 
-                    //case "5":
-                    //    ContactController.GetContact(2);
-                    //    break;
+                    case "5":
+                        ProcessGet();
+                        break;
 
                     case "6":
                         SendAllContacts();
@@ -98,6 +100,25 @@ namespace PhoneBook.Controller
                         break;
                 }
             }
+        }
+
+        private void ProcessGet()
+        {
+            string contactId = UserInput.GetuserInput("Choose contact id you want to view or press 0 for manin menu: ");
+
+            int id = int.Parse(contactId);
+            List<Contacts> contact = new();
+
+
+            var foundContact = _contactRepository.GetContact(id);
+
+
+            contact.Add(foundContact);
+
+            ContactVisualizer.ShowContacts(contact);
+
+            Get(foundContact.Id);
+
         }
 
         private void SendAllContacts()

@@ -47,9 +47,15 @@ namespace PhoneBook.Repository
 
         public Contacts Update(Contacts contacts)
         {
+           
             _context.Contacts.Update(contacts);
             _context.SaveChanges();
             return contacts;
+        }
+
+        public Contacts GetContact(int id)
+        {
+            return _context.Contacts.Find(id);
         }
     }
 }
