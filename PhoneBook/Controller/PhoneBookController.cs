@@ -204,9 +204,14 @@ namespace PhoneBook.Controller
         {
             GetAll();
 
-
             string input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
             if (input == "0") ShowMenu();
+            
+            while (!Validator.IsOnlyDigits(input)) // kolla även om id finns
+            {
+                input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
+                if (input == "0") ShowMenu();
+            }
             int id = int.Parse(input);
             var alltContacts = _contactRepository.GetAllContact();
 
@@ -236,11 +241,21 @@ namespace PhoneBook.Controller
         // Create contact
         private void ProcessAdd()
         {
-            //EmailService emailService = new EmailService();
-
             var name = UserInput.GetuserInput("Enter name: ");
+            while (!Validator.IsStringValid(name))
+            {
+                name = UserInput.GetuserInput("Enter name: ");
+            }
             var number = UserInput.GetuserInput("Enter phonenumber: ");
+            while (!Validator.IsOnlyDigits(number))
+            {
+                number = UserInput.GetuserInput("Enter phonenumber: ");
+            }
             var email = UserInput.GetuserInput("Enter Email: ");
+            while (!Validator.IsValidEmail(email))
+            {
+                 email = UserInput.GetuserInput("Enter Email: ");
+            }
 
             Contacts newContact = new Contacts
             {
@@ -249,7 +264,7 @@ namespace PhoneBook.Controller
                 Emaill = email
             };
 
-            Console.Write("Do you want to get a email with your contact information?, press y to send email, or n to skip: ");
+            Console.Write("Do you want to get a email with your contact information?, press y to send email, press any key to return to main menu: ");
             string sendEmail = Console.ReadLine();
 
             if (sendEmail == "y")

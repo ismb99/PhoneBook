@@ -20,5 +20,18 @@ namespace PhoneBook
             }
             return input;   
         }
+
+        public static int GetNumInput(string message)
+        {
+            Console.Write(message);
+            var numberAsString = Console.ReadLine();
+
+            int num;
+            while(!int.TryParse(numberAsString, out num))
+            {
+                numberAsString = Console.ReadLine();
+            }
+            return num;
+        }
     }
 }
