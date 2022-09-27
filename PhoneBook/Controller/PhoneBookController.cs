@@ -207,7 +207,7 @@ namespace PhoneBook.Controller
             string input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
             if (input == "0") ShowMenu();
             
-            while (!Validator.IsOnlyDigits(input)) // kolla även om id finns
+            while (!Validator.IsOnlyDigits(input)) 
             {
                 input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
                 if (input == "0") ShowMenu();
