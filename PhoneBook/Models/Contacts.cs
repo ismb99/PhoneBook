@@ -9,10 +9,9 @@ namespace PhoneBook.Models
 {
     public class Contacts
     {
-        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string PhoneNumber { get; set; }
+        public int PhoneNumber { get; set; }
         public string? Emaill { get; set; }
     }
 }

@@ -8,6 +8,12 @@ namespace PhoneBook
 {
     internal class UserInput
     {
+
+        internal void MainMenu()
+        {
+
+        }
+
         public static string GetuserInput(string message)
         {
             Console.Write(message);
@@ -15,7 +21,7 @@ namespace PhoneBook
 
             while (string.IsNullOrEmpty(input))
             {
-                Console.WriteLine("Invalid input, try again");
+                Console.WriteLine("Empty input try again");
                 input = Console.ReadLine();
             }
             return input;   

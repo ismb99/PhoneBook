@@ -49,7 +49,7 @@ namespace PhoneBook.Controller
 
             while (closeApp == false)
             {
-                Console.WriteLine("\n");
+                Console.WriteLine("\nMain Menu");
                 Console.WriteLine(@"What would you like todo ? Choose from the options below:
             1 - Add Contact
             2 - Delete a Contact
@@ -62,6 +62,11 @@ namespace PhoneBook.Controller
                 Console.WriteLine("\n\n");
 
                 string userChoice = Console.ReadLine();
+                while (string.IsNullOrEmpty(userChoice))
+                {
+                    Console.WriteLine("\nInvalid input. Please type a number from 1 to 7\n");
+                    userChoice = Console.ReadLine();
+                }
 
                 switch (userChoice)
                 {
@@ -104,7 +109,7 @@ namespace PhoneBook.Controller
 
         private void ProcessGet()
         {
-            string contactId = UserInput.GetuserInput("Choose contact id you want to view or press 0 for manin menu: ");
+            string contactId = GetNumberInput("Enter id you want to show: ");
 
             int id = int.Parse(contactId);
             List<Contacts> contact = new();
@@ -174,21 +179,27 @@ namespace PhoneBook.Controller
         private void ProcessUpdate()
         {
             GetAll();
-            string input = UserInput.GetuserInput("Choose the id you want to update or press 0 for main menu: ");
-            if (input == "0") ShowMenu();
-            int id = int.Parse(input);
+
+            string inputId = GetNumberInput("\nType the id you want to update or press 0 to return to main menu: ");
+
+            int id;
+
+            id = int.Parse(inputId);
 
             var contact = _contactRepository.GetAllContact().FirstOrDefault(contact => contact.Id == id);
 
             if (contact != null)
             {
-                string name = UserInput.GetuserInput("Update name: ");
-                string phoneNumber = UserInput.GetuserInput("Update number: ");
-                string email = UserInput.GetuserInput("Update email: ");
+                int updateNumber;
+                string updateName = GetNameInput();
+                string updateEmail = GetEmailInput();
+                string numberAsString = GetNumberInput("Enter your number: ");
 
-                contact.Name = name;
-                contact.PhoneNumber = phoneNumber;
-                contact.Emaill = email;
+                updateNumber = int.Parse(numberAsString);
+
+                contact.Name = updateName;
+                contact.PhoneNumber = updateNumber;
+                contact.Emaill = updateEmail;
                 Put(contact);
 
             }
@@ -203,16 +214,19 @@ namespace PhoneBook.Controller
         private void ProcessDelete()
         {
             GetAll();
+            Console.WriteLine("\n");
 
-            string input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
-            if (input == "0") ShowMenu();
-            
-            while (!Validator.IsOnlyDigits(input)) 
+            string inputId = GetNumberInput("\nType the id you want to delete or press 0 to return to main menu: ");
+            int id;
+            while (!Validator.IsOnlyDigits(inputId)) 
             {
-                input = UserInput.GetuserInput("\nType the id you want to delete or press 0 to return to main menu:");
-                if (input == "0") ShowMenu();
+                Console.WriteLine("Invalid input try again");
+                inputId = GetNumberInput("\nType the id you want to delete or press 0 to return to main menu: ");
             }
-            int id = int.Parse(input);
+
+            id = int.Parse(inputId);
+
+
             var alltContacts = _contactRepository.GetAllContact();
 
             var contact = alltContacts.Where(x => x.Id == id).FirstOrDefault();
@@ -220,7 +234,9 @@ namespace PhoneBook.Controller
             if (contact != null)
             {
                 List<Contacts> idContact = new List<Contacts>();
+
                 idContact.Add(contact);
+                
                 Console.WriteLine("\nThis contact was deleted");
                 ContactVisualizer.ShowContacts(idContact);
                 Delete(id);
@@ -228,87 +244,113 @@ namespace PhoneBook.Controller
 
             else
             {
-                string secondInput = UserInput.GetuserInput("\nId was not found!, press any key to tray again or press 0 for main menu: ");
-                if (secondInput == "0") ShowMenu();
-
-                else
-                {
-                    ProcessDelete();
-                }
+                Console.WriteLine("Id not found try again");
+                ProcessDelete();
             }
         }
 
         // Create contact
         private void ProcessAdd()
         {
-            var name = UserInput.GetuserInput("Enter name: ");
+            var name = GetNameInput();
+            var number = GetNumberInput("Enter you number: ");
+            var email = GetEmailInput();
+
+            int phoneNumber;
+
             while (!Validator.IsStringValid(name))
             {
-                name = UserInput.GetuserInput("Enter name: ");
+                Console.WriteLine("invalid input try again");
+                name = GetNameInput();
             }
-            var number = UserInput.GetuserInput("Enter phonenumber: ");
             while (!Validator.IsOnlyDigits(number))
             {
-                number = UserInput.GetuserInput("Enter phonenumber: ");
+                Console.WriteLine("invalid input try again");
+                number = GetNumberInput("Enter you number: ");
             }
-            var email = UserInput.GetuserInput("Enter Email: ");
-            while (!Validator.IsValidEmail(email))
-            {
-                 email = UserInput.GetuserInput("Enter Email: ");
-            }
+
+            phoneNumber = int.Parse(number);
 
             Contacts newContact = new Contacts
             {
                 Name = name,
-                PhoneNumber = number,
+                PhoneNumber = phoneNumber,
                 Emaill = email
             };
 
-            Console.Write("Do you want to get a email with your contact information?, press y to send email, press any key to return to main menu: ");
+            Console.Write("Do you want to get a email with your contact information?, press y to send email or return to main menu: ");
             string sendEmail = Console.ReadLine();
 
             if (sendEmail == "y")
             {
-                Console.Write("Enter admin Email: ");
-                string adminEmail = Console.ReadLine();
-                Console.Write("Password: ");
-                string password = Console.ReadLine();
-
-                MimeMessage message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Bingis khan", $"{adminEmail}"));
-                message.To.Add(MailboxAddress.Parse($"{email}"));
-
-                message.Subject = "Telefonbok";
-                message.Body = new TextPart("plain")
-                {
-                    Text = $"Name: {newContact.Name} Number: {newContact.PhoneNumber} Email: {newContact.Emaill}"
-                };
-
-                SmtpClient client = new SmtpClient();
-                try
-                {
-                    client.Connect("smtp.office365.com", 587, SecureSocketOptions.StartTls);
-                    client.Authenticate(adminEmail, password);
-                    client.Send(message);
-
-                    Console.WriteLine("Email sent");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    client.Disconnect(true);
-                    client.Dispose();
-                }
-
+                SendMail(email, newContact);
                 Post(newContact);
-
             }
             else
             {
                 Post(newContact);
+            }
+        }
+
+        private string GetEmailInput()
+        {
+            Console.Write("Type your email or type m to return to return to main menu:\n  ");
+            string email = Console.ReadLine();
+            if (email == "m") ShowMenu();
+           
+            return email;
+        }
+
+        private string GetNumberInput(string message)
+        {
+            Console.WriteLine(message);
+            string input = Console.ReadLine();
+            if (input == "m") ShowMenu();
+            return input;
+        }
+
+        private string GetNameInput()
+        {
+            Console.Write("Type your name or type m to return to return to main menu:\n  ");
+            string name = Console.ReadLine();
+            if (name == "m") ShowMenu();
+            return name;
+        }
+
+        private static void SendMail(string email, Contacts newContact)
+        {
+            Console.Write("Enter admin Email: ");
+            string adminEmail = Console.ReadLine();
+            Console.Write("Password: ");
+            string password = Console.ReadLine();
+
+            MimeMessage message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Bingis khan", $"{adminEmail}"));
+            message.To.Add(MailboxAddress.Parse($"{email}"));
+
+            message.Subject = "Telefonbok";
+            message.Body = new TextPart("plain")
+            {
+                Text = $"Name: {newContact.Name} Number: {newContact.PhoneNumber} Email: {newContact.Emaill}"
+            };
+
+            SmtpClient client = new SmtpClient();
+            try
+            {
+                client.Connect("smtp.office365.com", 587, SecureSocketOptions.StartTls);
+                client.Authenticate(adminEmail, password);
+                client.Send(message);
+
+                Console.WriteLine("Email sent");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                client.Disconnect(true);
+                client.Dispose();
             }
         }
     }

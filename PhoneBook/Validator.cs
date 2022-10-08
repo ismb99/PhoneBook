@@ -28,20 +28,27 @@ namespace PhoneBook
             return isValid;
         }
 
+
         public static bool IsOnlyDigits(string str)
         {
-            bool isValid = true;
+            if (String.IsNullOrEmpty(str))
+            {
+                return false;
+            }
 
             foreach (char c in str)
             {
                 if (!Char.IsDigit(c))
-                    isValid = false;
+                    return false;
             }
-            return isValid;
+            return true;
         }
-
+      
         public static bool IsValidEmail(string email)
         {
+            if (String.IsNullOrEmpty(email))
+                return false;
+
             return Regex.IsMatch(email, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         }
     }
