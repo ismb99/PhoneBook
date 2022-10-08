@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PhoneBook.Interfaces;
+using PhoneBook.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,38 +8,34 @@ using System.Threading.Tasks;
 
 namespace PhoneBook
 {
-    internal class UserInput
+    internal class UserInput : IUserInput
     {
+        PhoneBookService phoneBookService = new PhoneBookService();
 
-        internal void MainMenu()
+        public string GetEmailInput()
         {
+            Console.Write("Type your email or type m to return to return to main menu:\n  ");
+            string email = Console.ReadLine();
+            if (email == "m") phoneBookService.ShowMenu();
 
+            return email;
         }
 
-        public static string GetuserInput(string message)
+        public string GetNumberInput(string message)
         {
-            Console.Write(message);
-            string input = Console.ReadLine();
-
-            while (string.IsNullOrEmpty(input))
-            {
-                Console.WriteLine("Empty input try again");
-                input = Console.ReadLine();
-            }
-            return input;   
+            Console.WriteLine(message);
+            string? input = Console.ReadLine();
+            if (input == "m") phoneBookService.ShowMenu();
+            // ta bort getnameinput metoden och använd bara getnumberinput
+            return input;
         }
 
-        public static int GetNumInput(string message)
+        public string GetNameInput()
         {
-            Console.Write(message);
-            var numberAsString = Console.ReadLine();
-
-            int num;
-            while(!int.TryParse(numberAsString, out num))
-            {
-                numberAsString = Console.ReadLine();
-            }
-            return num;
+            Console.Write("Type your name or type m to return to return to main menu:\n  ");
+            string name = Console.ReadLine();
+            if (name == "m") phoneBookService.ShowMenu();
+            return name;
         }
     }
 }

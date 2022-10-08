@@ -53,7 +53,7 @@ namespace PhoneBook.Repository
             return contacts;
         }
 
-        public Contacts GetContact(int id)
+        public Contacts GetContactById(int id)
         {
             return _context.Contacts.Find(id);
         }

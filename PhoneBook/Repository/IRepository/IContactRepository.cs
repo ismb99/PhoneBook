@@ -13,7 +13,7 @@ namespace PhoneBook.Repository.IRepository
         Contacts AddContact(Contacts contacts);
         Contacts Remove(int id);
         Contacts Update(Contacts contacts);
-        Contacts GetContact(int id);
+        Contacts GetContactById(int id);
 
     }
 }

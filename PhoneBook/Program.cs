@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PhoneBook;
 using PhoneBook.Controller;
+using PhoneBook.Interfaces;
 using PhoneBook.Models.Data;
 using PhoneBook.Repository;
 using PhoneBook.Repository.IRepository;
@@ -16,12 +17,15 @@ class Program
         var host = CreateHostBuilder(args).Build();
 
         host.Services.GetService<IContactRepository>();
+        host.Services.GetService<IUserInput>();
 
-        var contactRepository = host.Services.GetService<IContactRepository>();
 
-        var phoneBookController = new PhoneBookController(contactRepository);
 
-        phoneBookController.ShowMenu();
+        //var contactRepository = host.Services.GetService<IContactRepository>();
+
+        //var phoneBookController = new PhoneBookController(contactRepository);
+
+        //phoneBookController.ShowMenu();
       
     }
 
@@ -31,6 +35,7 @@ class Program
             .ConfigureServices((context, services) =>
             {
                 services.AddScoped<IContactRepository, ContactRepository>();
+                services.AddScoped<IUserInput, UserInput>();
                 services.AddDbContext<PhoneBookContext>(options => options.UseSqlServer("Server=.;Database=PhoneBook;Trusted_Connection=True"));
             });
         return hostBuilder;
