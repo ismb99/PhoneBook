@@ -96,7 +96,6 @@ namespace PhoneBook.Controller
                         break;
 
                     case "7":
-                        Console.WriteLine("Godbyee");
                         closeApp = true;
                         break;
 
@@ -109,7 +108,7 @@ namespace PhoneBook.Controller
 
         private void ProcessGet()
         {
-            string contactId = GetNumberInput("Enter id you want to show: ");
+            string contactId = GetNumberInput("Enter the id you want to show: ");
 
             int id = int.Parse(contactId);
             List<Contacts> contact = new();
@@ -139,7 +138,7 @@ namespace PhoneBook.Controller
             message.From.Add(new MailboxAddress("Bingis khan", "im_077@hotmail.com"));
             message.To.Add(MailboxAddress.Parse(email));
 
-            message.Subject = "Alla Kontakter";
+            message.Subject = "Call contacts";
 
 
             Console.Write("Password: ");
@@ -294,9 +293,9 @@ namespace PhoneBook.Controller
 
         private string GetEmailInput()
         {
-            Console.Write("Type your email or type m to return to return to main menu:\n  ");
+            Console.Write("Type your email or type 0 to return to main menu:\n  ");
             string email = Console.ReadLine();
-            if (email == "m") ShowMenu();
+            if (email == "0") ShowMenu();
            
             return email;
         }
@@ -305,15 +304,15 @@ namespace PhoneBook.Controller
         {
             Console.WriteLine(message);
             string input = Console.ReadLine();
-            if (input == "m") ShowMenu();
+            if (input == "0") ShowMenu();
             return input;
         }
 
         private string GetNameInput()
         {
-            Console.Write("Type your name or type m to return to return to main menu:\n  ");
+            Console.Write("Type your name or type 0 to return to main menu:\n  ");
             string name = Console.ReadLine();
-            if (name == "m") ShowMenu();
+            if (name == "0") ShowMenu();
             return name;
         }
 
